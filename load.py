@@ -10,7 +10,7 @@ from pywavefront import visualization
 mouse = None
 axis  = "y"
 nwin  = 'Pokemon Center'
-name  = 'little_pc.obj'
+name  = 'donut.obj'
 mesh  = []
 
 def drawPoints():
@@ -47,27 +47,33 @@ def main():
 
 	glClearColor(.2,.2,.2,1.)
 
-#	glShadeModel(GL_SMOOTH)
-#	glEnable(GL_CULL_FACE)
-#	glEnable(GL_DEPTH_TEST)
+	glShadeModel(GL_SMOOTH)
+	glEnable(GL_CULL_FACE)
+	glEnable(GL_DEPTH_TEST)
 #	glEnable(GL_LIGHTING)
 #
 	lightZeroPosition = [-20.,2.,-2.,1.]
-	lightZeroColor = [.5,.5,.5,.5] #green tinged
+	lightZeroColor = [.5,.5,.5,.5]
+	lightSpecular = [0.4,0.4,0.4,0.4]
+	lightAmbiente = [0.0,0.0,0.0,1.]
+
 	glLightfv(GL_LIGHT0, GL_POSITION, lightZeroPosition)
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor)
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular)
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbiente)
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1)
 	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05)
 	glEnable(GL_LIGHT0)
+	glEnable(GL_LIGHTING)
 
-#	glMatrixMode(GL_PROJECTION)
 #	gluPerspective(GLdouble fovy,  GLdouble aspect,  GLdouble zNear,  GLdouble zFar);
 
-	gluPerspective(40.,1.,1.,40.)
+	glMatrixMode(GL_PROJECTION)
+	gluPerspective(30.,1.,.1,80.)
 	glMatrixMode(GL_MODELVIEW)
-	gluLookAt(0,0,10,
-		  0,0,0,
-		  0,1,0)
+	gluLookAt(0,5,10,
+		  0,2,0,
+		  0,2,-2)
 
 	mesh = pywavefront.Wavefront(name)
 
@@ -90,11 +96,6 @@ def display():
 def clickHdl(but,state,x,y):
 	global mouse
 
-#	print(but)
-#	print(state)
-#	print(x)
-#	print(y)
-
 	if   but is 3:
 		glTranslatef(0.0,0.0,0.4)
 		glutPostRedisplay()
@@ -112,23 +113,23 @@ def mouseHdl(mx,my):
 	if mouse is not None:
 		if   axis == 'x':
 			if mouse[1] > my :
-				glRotatef(-15.0,1.0,0.0,0.0)
-			else :
-				glRotatef(-15.0,-1.0,0.0,0.0)
+				glRotatef(-15.0,.5,0.0,0.0)
+			elif mouse[1] < my:
+				glRotatef(-15.0,-.5,0.0,0.0)
 			glutPostRedisplay()
 			mouse = (mx,my)
 		elif axis == 'y':
 			if mouse[0] > mx :
-				glRotatef(-15.0,0.0,0.0,1.0)
-			else :
-				glRotatef(-15.0,0.0,0.0,-1.0)
+				glRotatef(-15.0,0.0,0.0,.5)
+			elif mouse[0] < mx :
+				glRotatef(-15.0,0.0,0.0,-.5)
 			glutPostRedisplay()
 			mouse = (mx,my)
 		elif axis == 'z':
 			if mouse[0] > mx :
-				glRotatef(-15.0,0.0,1.0,0.0)
-			else :
-				glRotatef(-15.0,0.0,-1.0,0.0)
+				glRotatef(-15.0,0.0,.5,0.0)
+			elif mouse[0] < mx :
+				glRotatef(-15.0,0.0,-.5,0.0)
 			glutPostRedisplay()
 			mouse = (mx,my)
 
@@ -166,11 +167,11 @@ def keyboardHdl( key, x, y):
 		glutPostRedisplay()
 
 	if ord(key) == ord('q'):  
-		glTranslatef(0.0,0.0,0.1)
+		glTranslatef(0.0,0.0,0.2)
 		glutPostRedisplay()
  
 	if ord(key) == ord('e'):  
-		glTranslatef(0.0,0.0,-0.1)
+		glTranslatef(0.0,0.0,-0.2)
 		glutPostRedisplay() 
 
 ######################################################################################################
